@@ -11,18 +11,19 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.input.KeyCombination?>
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" fx:controller="org.veteroch4k.laba1.HelloController" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="Файл">
           <items>
             <MenuItem mnemonicParsing="false" text="Создать" />
-            <MenuItem mnemonicParsing="false" text="Открыть" />
+            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFileClick"/>
             <MenuItem mnemonicParsing="false" text="Сохранить" />
             <MenuItem mnemonicParsing="false" text="Сохранить как" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Выход" />
+            <MenuItem mnemonicParsing="false" text="Выход" onAction="#onExitClick"/>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Правка">
@@ -81,7 +82,7 @@
 
     <SplitPane dividerPositions="0.75" orientation="VERTICAL" VBox.vgrow="ALWAYS">
       <items>
-        <TextArea promptText="Введите текст программы..." wrapText="true" />
+        <TextArea fx:id="codeEditorArea" promptText="Введите текст программы..." wrapText="true" />
         <TextArea editable="false" promptText="Результат работы компилятора..." wrapText="true" />
       </items>
     </SplitPane>
