@@ -1,42 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.input.KeyCombination?>
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" fx:controller="org.veteroch4k.laba1.HelloController" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.veteroch4k.laba1.HelloController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="Файл">
           <items>
-            <MenuItem mnemonicParsing="false" text="Создать" onAction="#onNewClick" />
-            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFileClick" />
-            <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#onSaveClick" />
-            <MenuItem mnemonicParsing="false" text="Сохранить как" onAction="#onSaveAsClick" />
+            <MenuItem mnemonicParsing="false" onAction="#onNewClick" text="Создать">
+              <accelerator><KeyCombination fx:value="Ctrl+N"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onOpenFileClick" text="Открыть">
+              <accelerator><KeyCombination fx:value="Ctrl+O"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onSaveClick" text="Сохранить">
+              <accelerator><KeyCombination fx:value="Ctrl+S"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onSaveAsClick" text="Сохранить как">
+              <accelerator><KeyCombination fx:value="Ctrl+Shift+S"/></accelerator>
+            </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Выход" onAction="#onExitClick" />
+            <MenuItem mnemonicParsing="false" onAction="#onExitClick" text="Выход">
+              <accelerator><KeyCombination fx:value="Ctrl+Q"/></accelerator>
+            </MenuItem>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Правка">
           <items>
-            <MenuItem mnemonicParsing="false" text="Отменить" onAction="#onUndoClick" />
-            <MenuItem mnemonicParsing="false" text="Повторить" onAction="#onRedoClick" />
+            <MenuItem mnemonicParsing="false" onAction="#onUndoClick" text="Отменить">
+              <accelerator><KeyCombination fx:value="Ctrl+Z"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onRedoClick" text="Повторить">
+              <accelerator><KeyCombination fx:value="Ctrl+Y"/></accelerator>
+            </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Вырезать" onAction="#onCutClick" />
-            <MenuItem mnemonicParsing="false" text="Копировать" onAction="#onCopyClick" />
-            <MenuItem mnemonicParsing="false" text="Вставить" onAction="#onPasteClick" />
-            <MenuItem mnemonicParsing="false" text="Удалить" onAction="#onDeleteClick" />
+            <MenuItem mnemonicParsing="false" onAction="#onCutClick" text="Вырезать">
+              <accelerator><KeyCombination fx:value="Ctrl+X"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onCopyClick" text="Копировать">
+              <accelerator><KeyCombination fx:value="Ctrl+C"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onPasteClick" text="Вставить">
+              <accelerator><KeyCombination fx:value="Ctrl+V"/></accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onDeleteClick" text="Удалить">
+              <accelerator><KeyCombination fx:value="Delete"/></accelerator>
+            </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Выделить все" onAction="#onSelectAllClick" />
+            <MenuItem mnemonicParsing="false" onAction="#onSelectAllClick" text="Выделить все">
+              <accelerator><KeyCombination fx:value="Ctrl+A"/></accelerator>
+            </MenuItem>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Текст">
@@ -62,29 +82,129 @@
 
     <ToolBar prefHeight="40.0" prefWidth="200.0">
       <items>
-        <Button text="Создать" />
-        <Button text="Открыть" />
-        <Button text="Сохранить" />
+        <Button onAction="#onNewClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/1.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Создать" /></tooltip>
+        </Button>
+
+        <Button onAction="#onOpenFileClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/2.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Открыть" /></tooltip>
+        </Button>
+
+        <Button onAction="#onSaveClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/3.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Сохранить" /></tooltip>
+        </Button>
+
         <Separator orientation="VERTICAL" />
-        <Button text="Отменить" />
-        <Button text="Повторить" />
+
+        <Button onAction="#onUndoClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/4.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Отменить" /></tooltip>
+        </Button>
+
+        <Button onAction="#onRedoClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/5.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Повторить" /></tooltip>
+        </Button>
+
         <Separator orientation="VERTICAL" />
-        <Button text="Копировать" />
-        <Button text="Вырезать" />
-        <Button text="Вставить" />
-        <Separator orientation="VERTICAL" />
-        <Button text="Пуск" />
-        <Separator orientation="VERTICAL" />
-        <Button text="Справка" />
-        <Button text="О программе" />
+
+        <Button onAction="#onCopyClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/6.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Копировать" /></tooltip>
+        </Button>
+
+        <Button onAction="#onCutClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/7.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Вырезать" /></tooltip>
+        </Button>
+
+        <Button onAction="#onPasteClick">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="@icons/8.png"/>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Вставить" /></tooltip>
+        </Button>
+
+
       </items>
     </ToolBar>
 
-    <SplitPane dividerPositions="0.75" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.65" orientation="VERTICAL" VBox.vgrow="ALWAYS">
       <items>
-        <TextArea fx:id="codeEditorArea" promptText="Введите текст программы..." wrapText="true" />
-        <TextArea editable="false" promptText="Результат работы компилятора..." wrapText="true" />
+        <TabPane fx:id="editorTabPane" tabClosingPolicy="ALL_TABS" />
+
+        <TabPane fx:id="outputTabPane" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+            <Tab text="Ошибки (Analyzer)">
+              <content>
+                <TableView fx:id="errorTable" prefHeight="200.0" prefWidth="200.0">
+                  <columns>
+                    <TableColumn prefWidth="350.0" text="File path">
+                      <cellValueFactory><PropertyValueFactory property="filePath" /></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="50.0" text="Line">
+                      <cellValueFactory><PropertyValueFactory property="line" /></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="70.0" text="Column">
+                      <cellValueFactory><PropertyValueFactory property="column" /></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="450.0" text="Message">
+                      <cellValueFactory><PropertyValueFactory property="message" /></cellValueFactory>
+                    </TableColumn>
+                  </columns>
+                </TableView>
+              </content>
+            </Tab>
+            <Tab text="Консоль">
+              <content>
+                <TextArea fx:id="consoleOutput" editable="false" promptText="Вывод программы..." wrapText="true" />
+              </content>
+            </Tab>
+          </tabs>
+        </TabPane>
       </items>
     </SplitPane>
+
+    <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-padding: 3 10 3 10; -fx-border-color: #d3d3d3; -fx-border-width: 1 0 0 0;" VBox.vgrow="NEVER">
+      <children>
+        <Label fx:id="statusLabel" text="Статус: Готов" textFill="#5b5b5b" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <Label text="UTF-8" textFill="#5b5b5b" />
+        <Label fx:id="positionLabel" text="Строка: 1, Столбец: 1" textFill="#5b5b5b" />
+      </children>
+    </HBox>
   </children>
 </VBox>
