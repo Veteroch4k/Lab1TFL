@@ -1,61 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.input.KeyCombination?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.veteroch4k.laba1.HelloController">
+<VBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.veteroch4k.laba1.HelloController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="Файл">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#onNewClick" text="Создать">
-              <accelerator><KeyCombination fx:value="Ctrl+N"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+N" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onOpenFileClick" text="Открыть">
-              <accelerator><KeyCombination fx:value="Ctrl+O"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+O" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onSaveClick" text="Сохранить">
-              <accelerator><KeyCombination fx:value="Ctrl+S"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+S" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onSaveAsClick" text="Сохранить как">
-              <accelerator><KeyCombination fx:value="Ctrl+Shift+S"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+Shift+S" /></accelerator>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#onExitClick" text="Выход">
-              <accelerator><KeyCombination fx:value="Ctrl+Q"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+Q" /></accelerator>
             </MenuItem>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Правка">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#onUndoClick" text="Отменить">
-              <accelerator><KeyCombination fx:value="Ctrl+Z"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+Z" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onRedoClick" text="Повторить">
-              <accelerator><KeyCombination fx:value="Ctrl+Y"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+Y" /></accelerator>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#onCutClick" text="Вырезать">
-              <accelerator><KeyCombination fx:value="Ctrl+X"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+X" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onCopyClick" text="Копировать">
-              <accelerator><KeyCombination fx:value="Ctrl+C"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+C" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onPasteClick" text="Вставить">
-              <accelerator><KeyCombination fx:value="Ctrl+V"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+V" /></accelerator>
             </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#onDeleteClick" text="Удалить">
-              <accelerator><KeyCombination fx:value="Delete"/></accelerator>
+              <accelerator><KeyCombination fx:value="Delete" /></accelerator>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#onSelectAllClick" text="Выделить все">
-              <accelerator><KeyCombination fx:value="Ctrl+A"/></accelerator>
+              <accelerator><KeyCombination fx:value="Ctrl+A" /></accelerator>
             </MenuItem>
           </items>
         </Menu>
@@ -85,7 +83,9 @@
         <Button onAction="#onNewClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/1.png"/>
+              <image>
+                <Image url="@../../../icons/1.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Создать" /></tooltip>
@@ -94,7 +94,9 @@
         <Button onAction="#onOpenFileClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/2.png"/>
+              <image>
+                <Image url="@../../../icons/2.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Открыть" /></tooltip>
@@ -103,7 +105,9 @@
         <Button onAction="#onSaveClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/3.png"/>
+              <image>
+                <Image url="@../../../icons/3.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Сохранить" /></tooltip>
@@ -114,7 +118,9 @@
         <Button onAction="#onUndoClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/4.png"/>
+              <image>
+                <Image url="@../../../icons/4.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Отменить" /></tooltip>
@@ -123,7 +129,9 @@
         <Button onAction="#onRedoClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/5.png"/>
+              <image>
+                <Image url="@../../../icons/5.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Повторить" /></tooltip>
@@ -134,7 +142,9 @@
         <Button onAction="#onCopyClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/6.png"/>
+              <image>
+                <Image url="@../../../icons/6.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Копировать" /></tooltip>
@@ -143,7 +153,9 @@
         <Button onAction="#onCutClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/7.png"/>
+              <image>
+                <Image url="@../../../icons/7.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Вырезать" /></tooltip>
@@ -152,16 +164,16 @@
         <Button onAction="#onPasteClick">
           <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-              <Image url="@icons/8.png"/>
+              <image>
+                <Image url="@../../../icons/8.png" />
+              </image>
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Вставить" /></tooltip>
         </Button>
 
-
       </items>
     </ToolBar>
-
     <SplitPane dividerPositions="0.65" orientation="VERTICAL" VBox.vgrow="ALWAYS">
       <items>
         <TabPane fx:id="editorTabPane" tabClosingPolicy="ALL_TABS" />
