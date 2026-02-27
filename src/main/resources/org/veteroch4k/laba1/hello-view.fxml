@@ -18,25 +18,25 @@
       <menus>
         <Menu mnemonicParsing="false" text="Файл">
           <items>
-            <MenuItem mnemonicParsing="false" text="Создать" />
-            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFileClick"/>
-            <MenuItem mnemonicParsing="false" text="Сохранить" />
-            <MenuItem mnemonicParsing="false" text="Сохранить как" />
+            <MenuItem mnemonicParsing="false" text="Создать" onAction="#onNewClick" />
+            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFileClick" />
+            <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#onSaveClick" />
+            <MenuItem mnemonicParsing="false" text="Сохранить как" onAction="#onSaveAsClick" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Выход" onAction="#onExitClick"/>
+            <MenuItem mnemonicParsing="false" text="Выход" onAction="#onExitClick" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Правка">
           <items>
-            <MenuItem mnemonicParsing="false" text="Отменить" />
-            <MenuItem mnemonicParsing="false" text="Повторить" />
+            <MenuItem mnemonicParsing="false" text="Отменить" onAction="#onUndoClick" />
+            <MenuItem mnemonicParsing="false" text="Повторить" onAction="#onRedoClick" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Вырезать" />
-            <MenuItem mnemonicParsing="false" text="Копировать" />
-            <MenuItem mnemonicParsing="false" text="Вставить" />
-            <MenuItem mnemonicParsing="false" text="Удалить" />
+            <MenuItem mnemonicParsing="false" text="Вырезать" onAction="#onCutClick" />
+            <MenuItem mnemonicParsing="false" text="Копировать" onAction="#onCopyClick" />
+            <MenuItem mnemonicParsing="false" text="Вставить" onAction="#onPasteClick" />
+            <MenuItem mnemonicParsing="false" text="Удалить" onAction="#onDeleteClick" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Выделить все" />
+            <MenuItem mnemonicParsing="false" text="Выделить все" onAction="#onSelectAllClick" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Текст">
