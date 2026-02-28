@@ -74,6 +74,48 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version> <configuration>
+                <name>MyJavaFXApp</name> <appVersion>1.0.0</appVersion>
+                <vendor>MyName</vendor>
+
+                <type>APP_IMAGE</type>
+
+                <destination>target/dist</destination>
+
+                <module>org.veteroch4k.laba1/org.veteroch4k.laba1.HelloApplication</module>
+                <modulePaths>
+                    <modulePath>target/classes</modulePath>
+                    <modulePath>target/dependencies</modulePath>
+                </modulePaths>
+
+                <winConsole>false</winConsole>
+            </configuration>
+            </plugin>
+
+
         </plugins>
     </build>
 </project>
