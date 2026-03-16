@@ -1,7 +1,9 @@
 package org.veteroch4k.laba1;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -221,6 +223,37 @@ public class HelloController {
         });
     }
 
+    @FXML
+    public void onAboutClick(ActionEvent event) {
+        try {
+            String githubUrl = "https://github.com/Veteroch4k/Lab1TFL?tab=readme-ov-file#readme";
+
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI(githubUrl));
+            } else {
+                Runtime.getRuntime().exec("xdg-open " + githubUrl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onSpravkaClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Справка");
+        alert.setHeaderText("Справка");
+        alert.setContentText(
+                "Реализованные функции:\n" +
+                        "• Многокладочный интерфейс с нумерацией строк\n" +
+                        "• Изменение масштаба шрифта (Ctrl + Колесико)\n" +
+                        "• Открытие файлов через Drag-and-Drop\n" +
+                        "• Строка состояния с информацией о кодировке, языке и позиции курсора\n" +
+                        "• Сохранение, открытие и редактирование текста\n" +
+                        "• Интеграция с анализатором (заглушка)"
+        );
+        alert.showAndWait();
+    }
 
     @FXML public void onUndoClick(ActionEvent event) { if(getActiveTextArea() != null) getActiveTextArea().undo(); }
     @FXML public void onRedoClick(ActionEvent event) { if(getActiveTextArea() != null) getActiveTextArea().redo(); }
