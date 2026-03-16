@@ -68,7 +68,13 @@
             <MenuItem mnemonicParsing="false" text="Исходный код программы" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Пуск" />
+        <Menu mnemonicParsing="false" text="Пуск">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#onStartAnalysisClick" text="Запустить анализ">
+              <accelerator><KeyCombination fx:value="F5" /></accelerator>
+            </MenuItem>
+          </items>
+        </Menu>
         <Menu mnemonicParsing="false" text="Справка">
           <items>
             <MenuItem fx:id="aboutSpravkaItem" mnemonicParsing="false" onAction="#onSpravkaClick"  text="Вызов справки" />
@@ -111,6 +117,16 @@
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Сохранить" /></tooltip>
+        </Button>
+
+        <Button onAction="#onStartAnalysisClick" text="Пуск">
+          <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../../../icons/9.png" /> </image>
+            </ImageView>
+          </graphic>
+          <tooltip><Tooltip text="Запустить лексический анализ" /></tooltip>
         </Button>
 
         <Separator orientation="VERTICAL" />
@@ -180,6 +196,16 @@
 
         <TabPane fx:id="outputTabPane" tabClosingPolicy="UNAVAILABLE">
           <tabs>
+
+            <Tab text="Лексемы">
+              <content>
+                <TableView fx:id="tokenTable" prefHeight="200.0" prefWidth="200.0">
+                  <columns>
+                  </columns>
+                </TableView>
+              </content>
+            </Tab>
+
             <Tab text="Ошибки (Analyzer)">
               <content>
                 <TableView fx:id="errorTable" prefHeight="200.0" prefWidth="200.0">

@@ -1,12 +1,14 @@
 package org.veteroch4k.laba1;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.util.Optional;
+import java.util.List;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -16,14 +18,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 public class HelloController {
 
@@ -31,6 +34,8 @@ public class HelloController {
     @FXML private TabPane editorTabPane;
     @FXML private Label statusLabel;
     @FXML private Label positionLabel;
+    @FXML private TableView<Token> tokenTable;
+    @FXML private TableView<ErrorItem> errorTable;
 
     private double currentFontSize = 14.0;
 
@@ -63,6 +68,116 @@ public class HelloController {
                 updateStatusBar((TextArea) newTab.getContent());
             }
         });
+
+        if (tokenTable != null) {
+            tokenTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    TextArea activeTextArea = getActiveTextArea();
+                    if (activeTextArea != null) {
+                        highlightToken(activeTextArea, newSelection);
+                    }
+                }
+            });
+        }
+
+        if (tokenTable != null) {
+            TableColumn<Token, String> typeCol = new TableColumn<>("Тип лексемы");
+            typeCol.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().type().name()));
+            typeCol.setPrefWidth(150);
+
+            TableColumn<Token, String> valueCol = new TableColumn<>("Значение");
+            valueCol.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().value()));
+            valueCol.setPrefWidth(150);
+
+            TableColumn<Token, Number> lineCol = new TableColumn<>("Строка");
+            lineCol.setCellValueFactory(
+                cellData -> new SimpleIntegerProperty(cellData.getValue().line()));
+            lineCol.setPrefWidth(70);
+
+            TableColumn<Token, Number> colCol = new TableColumn<>("Символ");
+            colCol.setCellValueFactory(
+                cellData -> new SimpleIntegerProperty(cellData.getValue().column()));
+            colCol.setPrefWidth(70);
+
+            tokenTable.getColumns().setAll(typeCol, valueCol, lineCol, colCol);
+        }
+
+        if (errorTable != null) {
+            TableColumn<ErrorItem, String> fileCol = (TableColumn<ErrorItem, String>) errorTable.getColumns().get(0);
+            fileCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().filePath()));
+
+            TableColumn<ErrorItem, Number> errLineCol = (TableColumn<ErrorItem, Number>) errorTable.getColumns().get(1);
+            errLineCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().line()));
+
+            TableColumn<ErrorItem, Number> errColCol = (TableColumn<ErrorItem, Number>) errorTable.getColumns().get(2);
+            errColCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().column()));
+
+            TableColumn<ErrorItem, String> msgCol = (TableColumn<ErrorItem, String>) errorTable.getColumns().get(3);
+            msgCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().message()));
+
+            errorTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    TextArea activeTextArea = getActiveTextArea();
+                    if (activeTextArea != null) {
+                        highlightToken(activeTextArea, new Token(TokenType.ERROR, newSelection.errorValue(), newSelection.line(), newSelection.column()));
+                    }
+                }
+            });
+        }
+
+    }
+
+    @FXML
+    public void onStartAnalysisClick(ActionEvent event) {
+        TextArea activeTextArea = getActiveTextArea();
+        if (activeTextArea == null || tokenTable == null) return;
+
+        tokenTable.getItems().clear();
+
+        LexicalAnalyzer analyzer = new LexicalAnalyzer();
+        List<Token> tokens = analyzer.analyze(activeTextArea.getText());
+
+        tokenTable.getItems().clear();
+        errorTable.getItems().clear();
+
+        File activeFile = getActiveFile();
+        String fileName = (activeFile != null) ? activeFile.getName() : "Новый документ";
+
+        for (Token t : tokens) {
+            if (t.type() == TokenType.ERROR) {
+                String msg = "Недопустимый символ: '" + t.value() + "'";
+                errorTable.getItems().add(new ErrorItem(fileName, t.line(), t.column(), msg, t.value()));
+            } else if (t.type() != TokenType.WHITESPACE && t.type() != TokenType.EOF) {
+                tokenTable.getItems().add(t);
+            }
+        }
+        statusLabel.setText("Статус: Лексический анализ завершен");
+        tokenTable.refresh();
+        errorTable.refresh();
+    }
+
+    private void highlightToken(TextArea textArea, Token token) {
+        textArea.requestFocus();
+        int caretPos = 0;
+        String text = textArea.getText();
+        int currentLine = 1;
+        int currentCol = 1;
+
+        for (int i = 0; i < text.length(); i++) {
+            if (currentLine == token.line() && currentCol == token.column()) {
+                caretPos = i;
+                break;
+            }
+            if (text.charAt(i) == '\n') {
+                currentLine++;
+                currentCol = 1;
+            } else {
+                currentCol++;
+            }
+        }
+        textArea.selectRange(caretPos, caretPos + token.value().length());
     }
 
 
@@ -102,7 +217,6 @@ public class HelloController {
                 if (event.getDeltaY() > 0) currentFontSize += 1;
                 else if (event.getDeltaY() < 0) currentFontSize = Math.max(8, currentFontSize - 1);
 
-                // Применяем новый масштаб к обоим полям
                 textArea.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: " + currentFontSize + ";");
                 lineNumbersArea.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: " + currentFontSize + "; -fx-control-inner-background: #f0f0f0; -fx-text-fill: #888888;");
                 event.consume();
@@ -167,7 +281,7 @@ public class HelloController {
         try {
             String content = Files.readString(file.toPath());
             createNewTab(file.getName(), content);
-            editorTabPane.getSelectionModel().getSelectedItem().setUserData(file); // Привязываем файл к вкладке
+            editorTabPane.getSelectionModel().getSelectedItem().setUserData(file);
         } catch (IOException e) {
             System.err.println("Ошибка чтения: " + e.getMessage());
         }
@@ -192,7 +306,7 @@ public class HelloController {
             saveToFile(file);
             Tab activeTab = editorTabPane.getSelectionModel().getSelectedItem();
             activeTab.setText(file.getName());
-            activeTab.setUserData(file); // Сохраняем привязку
+            activeTab.setUserData(file);
         }
     }
 
