@@ -51,14 +51,16 @@ public class SyntaxAnalyzer {
       advance();
     } else {
       Token badToken = peek();
-
       errors.add(new ErrorItem("Новый документ", badToken.line(), badToken.column(),
           "Синтаксическая ошибка: " + errorMessage + ". Встречено: '" + badToken.value() + "'", badToken.value()));
 
-      while (peek().type() != expected && peek().type() != TokenType.SEMICOLON && peek().type() != TokenType.EOF) {
-        advance();
-      }
-      if (peek().type() == expected) {
+      TokenType currentType = peek().type();
+      if (currentType != expected &&
+          currentType != TokenType.L_PAREN &&
+          currentType != TokenType.R_PAREN &&
+          currentType != TokenType.SEMICOLON &&
+          currentType != TokenType.EOF) {
+
         advance();
       }
     }
