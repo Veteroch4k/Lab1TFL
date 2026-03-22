@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -132,12 +133,7 @@ public class HelloController {
     @FXML
     public void onStartAnalysisClick(ActionEvent event) {
         TextArea activeTextArea = getActiveTextArea();
-        if (activeTextArea == null || tokenTable == null) return;
-
-        tokenTable.getItems().clear();
-
-        LexicalAnalyzer analyzer = new LexicalAnalyzer();
-        List<Token> tokens = analyzer.analyze(activeTextArea.getText());
+        if (activeTextArea == null || tokenTable == null || errorTable == null) return;
 
         tokenTable.getItems().clear();
         errorTable.getItems().clear();
@@ -145,15 +141,39 @@ public class HelloController {
         File activeFile = getActiveFile();
         String fileName = (activeFile != null) ? activeFile.getName() : "Новый документ";
 
-        for (Token t : tokens) {
+        LexicalAnalyzer lexer = new LexicalAnalyzer();
+        List<Token> allTokens = lexer.analyze(activeTextArea.getText());
+
+        List<Token> validTokensForParser = new ArrayList<>();
+        int lexicalErrorsCount = 0;
+
+        for (Token t : allTokens) {
             if (t.type() == TokenType.ERROR) {
-                String msg = "Недопустимый символ: '" + t.value() + "'";
+                String msg = "Лексическая ошибка: Недопустимый символ";
                 errorTable.getItems().add(new ErrorItem(fileName, t.line(), t.column(), msg, t.value()));
-            } else if (t.type() != TokenType.WHITESPACE && t.type() != TokenType.EOF) {
-                tokenTable.getItems().add(t);
+                lexicalErrorsCount++;
+            } else if (t.type() != TokenType.WHITESPACE) {
+                if (t.type() != TokenType.EOF) {
+                    tokenTable.getItems().add(t);
+                }
+                validTokensForParser.add(t);
             }
         }
-        statusLabel.setText("Статус: Лексический анализ завершен");
+
+        SyntaxAnalyzer parser = new SyntaxAnalyzer(validTokensForParser);
+        List<ErrorItem> syntaxErrors = parser.parse();
+
+        for (ErrorItem err : syntaxErrors) {
+            errorTable.getItems().add(new ErrorItem(fileName, err.line(), err.column(), err.message(), err.errorValue()));
+        }
+
+        int totalErrors = lexicalErrorsCount + syntaxErrors.size();
+        if (totalErrors == 0) {
+            statusLabel.setText("Статус: Анализ завершен успешно. Ошибок не найдено.");
+        } else {
+            statusLabel.setText("Статус: Анализ завершен. Найдено ошибок: " + totalErrors);
+        }
+
         tokenTable.refresh();
         errorTable.refresh();
     }
