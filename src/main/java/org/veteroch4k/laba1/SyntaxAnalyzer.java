@@ -49,20 +49,24 @@ public class SyntaxAnalyzer {
   private void require(TokenType expected, String errorMessage) {
     if (peek().type() == expected) {
       advance();
-    } else {
-      Token badToken = peek();
-      errors.add(new ErrorItem("Новый документ", badToken.line(), badToken.column(),
-          "Синтаксическая ошибка: " + errorMessage + ". Встречено: '" + badToken.value() + "'", badToken.value()));
+      return;
+    }
 
-      TokenType currentType = peek().type();
-      if (currentType != expected &&
-          currentType != TokenType.L_PAREN &&
-          currentType != TokenType.R_PAREN &&
-          currentType != TokenType.SEMICOLON &&
-          currentType != TokenType.EOF) {
 
-        advance();
-      }
+    Token badToken = peek();
+    errors.add(new ErrorItem("Новый документ", badToken.line(), badToken.column(),
+        "Синтаксическая ошибка: " + errorMessage + ". Встречено: '" + badToken.value() + "'", badToken.value()));
+
+    while (peek().type() != expected &&
+        peek().type() != TokenType.SEMICOLON &&
+        peek().type() != TokenType.EOF &&
+        peek().type() != TokenType.R_PAREN &&
+        peek().type() != TokenType.L_PAREN) {
+      advance();
+    }
+
+    if (peek().type() == expected) {
+      advance();
     }
   }
 
