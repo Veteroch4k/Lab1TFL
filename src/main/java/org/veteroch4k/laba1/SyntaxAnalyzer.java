@@ -46,12 +46,11 @@ public class SyntaxAnalyzer {
     return false;
   }
 
-  private void require(TokenType expected, String errorMessage) {
+  private void require(TokenType expected, String errorMessage, TokenType... additionalSync) {
     if (peek().type() == expected) {
       advance();
       return;
     }
-
 
     Token badToken = peek();
     errors.add(new ErrorItem("Новый документ", badToken.line(), badToken.column(),
@@ -62,6 +61,16 @@ public class SyntaxAnalyzer {
         peek().type() != TokenType.EOF &&
         peek().type() != TokenType.R_PAREN &&
         peek().type() != TokenType.L_PAREN) {
+
+      boolean isSync = false;
+      for (TokenType t : additionalSync) {
+        if (peek().type() == t) {
+          isSync = true;
+          break;
+        }
+      }
+      if (isSync) break;
+
       advance();
     }
 
@@ -71,20 +80,17 @@ public class SyntaxAnalyzer {
   }
 
   private void parsePrototype() {
+    require(TokenType.KW_FUNCTION, "Ожидалось ключевое слово 'function'", TokenType.IDENTIFIER);
 
-    require(TokenType.KW_FUNCTION, "Ожидалось ключевое слово 'function'");
     require(TokenType.IDENTIFIER, "Ожидалось имя функции");
     require(TokenType.L_PAREN, "Ожидалась открывающая скобка '('");
 
     parseArgs();
 
     require(TokenType.R_PAREN, "Ожидалась закрывающая скобка ')'");
-
     parseRetType();
-
     require(TokenType.SEMICOLON, "Ожидалась точка с запятой ';' в конце прототипа");
   }
-
 
   private void parseArgs() {
     if (peek().type() != TokenType.R_PAREN && peek().type() != TokenType.EOF) {
@@ -98,7 +104,7 @@ public class SyntaxAnalyzer {
 
   private void parseArg() {
     parseType();
-    require(TokenType.VARIABLE, "Ожидалось имя переменной (начинается с '$')");
+    require(TokenType.VARIABLE, "Ожидалось имя переменной", TokenType.COMMA, TokenType.ASSIGN);
     parseDefaultVal();
   }
 
@@ -132,7 +138,7 @@ public class SyntaxAnalyzer {
   }
 
   private boolean isTypeToken(TokenType type) {
-    return type == TokenType.TYPE_INT || type == TokenType.TYPE_STRING || type == TokenType.IDENTIFIER;
+    return type == TokenType.TYPE_INT || type == TokenType.TYPE_STRING || type == TokenType.TYPE_FLOAT || type == TokenType.IDENTIFIER;
   }
 
   private void requireTypeToken() {
