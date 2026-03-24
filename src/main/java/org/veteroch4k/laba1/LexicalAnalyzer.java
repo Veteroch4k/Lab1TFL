@@ -117,15 +117,23 @@ public class LexicalAnalyzer {
     sb.append(text.charAt(pos));
     advance();
 
+    boolean hasName = false;
+
     while (pos < text.length()) {
       char c = text.charAt(pos);
       if (Character.isLetterOrDigit(c) || c == '_') {
         sb.append(c);
         advance();
+        hasName = true;
       } else {
         break;
       }
     }
+
+    if (!hasName) {
+      return new Token(TokenType.ERROR, sb.toString(), line, startColumn);
+    }
+
     return new Token(TokenType.VARIABLE, sb.toString(), line, startColumn);
   }
 
@@ -152,6 +160,8 @@ public class LexicalAnalyzer {
       type = TokenType.TYPE_INT;
     } else if (word.equals("string")) {
       type = TokenType.TYPE_STRING;
+    } else if (word.equals("float")) {
+      type = TokenType.TYPE_FLOAT;
     }
 
 
