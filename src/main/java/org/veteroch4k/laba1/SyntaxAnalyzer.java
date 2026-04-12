@@ -111,11 +111,8 @@ public class SyntaxAnalyzer {
   private void parseType() {
     if (match(TokenType.QUESTION)) {
       requireTypeToken();
-    } else {
-      if (isTypeToken(peek().type())) {
-        advance();
-      }
     }
+    requireTypeToken();
   }
 
   private void parseDefaultVal() {
