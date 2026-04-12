@@ -188,6 +188,10 @@
           <tooltip><Tooltip text="Вставить" /></tooltip>
         </Button>
 
+        <Separator orientation="VERTICAL" />
+        <ComboBox fx:id="regexTypeComboBox" promptText="Тип поиска" />
+        <Button onAction="#onRegexSearchClick" text="Поиск Regex" />
+
       </items>
     </ToolBar>
     <SplitPane dividerPositions="0.65" orientation="VERTICAL" VBox.vgrow="ALWAYS">
@@ -222,6 +226,14 @@
                     <TableColumn prefWidth="450.0" text="Message">
                       <cellValueFactory><PropertyValueFactory property="message" /></cellValueFactory>
                     </TableColumn>
+                  </columns>
+                </TableView>
+              </content>
+            </Tab>
+            <Tab text="Поиск подстрок">
+              <content>
+                <TableView fx:id="regexResultTable" prefHeight="200.0" prefWidth="200.0">
+                  <columns>
                   </columns>
                 </TableView>
               </content>

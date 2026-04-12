@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Tab;
@@ -32,10 +33,13 @@ public class HelloController {
 
 
     @FXML private TabPane editorTabPane;
+    @FXML private TabPane outputTabPane;
     @FXML private Label statusLabel;
     @FXML private Label positionLabel;
     @FXML private TableView<Token> tokenTable;
     @FXML private TableView<ErrorItem> errorTable;
+    @FXML private ComboBox<String> regexTypeComboBox;
+    @FXML private TableView<SearchResult> regexResultTable;
 
     private double currentFontSize = 14.0;
 
@@ -127,6 +131,62 @@ public class HelloController {
             });
         }
 
+        if (regexTypeComboBox != null) {
+            regexTypeComboBox.getItems().addAll("Числа", "Пароли", "Email");
+            regexTypeComboBox.setValue("Числа");
+        }
+
+        if (regexResultTable != null) {
+            TableColumn<SearchResult, String> textCol = new TableColumn<>("Подстрока");
+            textCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getText()));
+            textCol.setPrefWidth(300);
+
+            TableColumn<SearchResult, Number> lineCol2 = new TableColumn<>("Строка");
+            lineCol2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getLine()));
+
+            TableColumn<SearchResult, Number> colCol2 = new TableColumn<>("Символ");
+            colCol2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getColumn()));
+
+            TableColumn<SearchResult, Number> lenCol = new TableColumn<>("Длина");
+            lenCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getLength()));
+
+            regexResultTable.getColumns().setAll(textCol, lineCol2, colCol2, lenCol);
+
+            regexResultTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    TextArea activeTextArea = getActiveTextArea();
+                    if (activeTextArea != null) {
+                        activeTextArea.requestFocus();
+                        activeTextArea.selectRange(newSelection.getStartOffset(), newSelection.getEndOffset());
+                    }
+                }
+            });
+        }
+
+    }
+
+    @FXML
+    public void onRegexSearchClick(ActionEvent event) {
+        TextArea activeTextArea = getActiveTextArea();
+        if (activeTextArea == null || regexResultTable == null || regexTypeComboBox == null) return;
+
+        regexResultTable.getItems().clear();
+
+        String text = activeTextArea.getText();
+        String searchType = regexTypeComboBox.getValue();
+
+        if (text.isEmpty()) {
+            statusLabel.setText("Статус: Нет данных для поиска.");
+            return;
+        }
+
+        List<SearchResult> results = RegexSearcher.search(text, searchType);
+
+        regexResultTable.getItems().addAll(results);
+
+        statusLabel.setText("Статус: Поиск завершен. Найдено совпадений (" + searchType + "): " + results.size());
+
+        outputTabPane.getSelectionModel().select(2);
     }
 
     @FXML
