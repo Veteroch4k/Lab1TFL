@@ -18,7 +18,7 @@ public class RegexSearcher {
         regex = "[A-Za-zА-Яа-я0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{10,}";
         break;
       case "Email":
-        regex = "[a-zA-Z0-9а-яА-Я._%+-]+@[a-zA-Z0-9а-яА-Я.-]+\\.[a-zA-Zа-яА-Я]{2,}";
+        regex = "[a-zA-Z0-9а-яА-Я._%+-]+@[a-zA-Z0-9а-яА-Я-]+(?:\\.[a-zA-Z0-9а-яА-Я-]+)*\\.[a-zA-Zа-яА-Я]{2,}";
         break;
     }
 
@@ -54,4 +54,100 @@ public class RegexSearcher {
     }
     return new int[]{line, column};
   }
+
+
+  public static List<SearchResult> searchEmailWithAutomaton(String text) {
+    List<SearchResult> results = new ArrayList<>();
+    int state = 0;
+    int startIdx = -1;
+
+    String paddedText = text + " ";
+
+    for (int i = 0; i < paddedText.length(); i++) {
+      char c = paddedText.charAt(i);
+
+      switch (state) {
+        case 0:
+          if (isLocalChar(c)) {
+            state = 1;
+            startIdx = i;
+          }
+          break;
+
+        case 1:
+          if (c == '@') {
+            state = 2;
+          } else if (!isLocalChar(c)) {
+            state = 0;
+          }
+          break;
+
+        case 2:
+          if (isDomainChar(c)) {
+            state = 3;
+          } else {
+            state = 0;
+          }
+          break;
+
+        case 3:
+          if (c == '.') {
+            state = 4;
+          } else if (!isDomainChar(c)) {
+            state = 0;
+          }
+          break;
+
+        case 4:
+          if (isZoneChar(c)) {
+            state = 5;
+          } else {
+            state = 0; // Сброс
+          }
+          break;
+
+        case 5:
+          if (isZoneChar(c)) {
+            state = 6;
+          } else if (c == '.') {
+            state = 4;
+          } else {
+
+            state = 0;
+          }
+          break;
+
+        case 6:
+          if (isZoneChar(c)) {
+            state = 6;
+          } else if (c == '.') {
+            state = 4;
+          } else {
+
+            int endIdx = i;
+            String foundEmail = paddedText.substring(startIdx, endIdx);
+            int[] lineAndCol = calculateLineAndColumn(text, startIdx);
+
+            results.add(new SearchResult(foundEmail, lineAndCol[0], lineAndCol[1], endIdx - startIdx, startIdx, endIdx));
+
+            state = 0;
+            i--;
+          }
+          break;
+      }
+    }
+    return results;
+  }
+
+  private static boolean isLocalChar(char c) {
+    return Character.isLetterOrDigit(c) || c == '.' || c == '_' || c == '%' || c == '+' || c == '-';
+  }
+  private static boolean isDomainChar(char c) {
+    return Character.isLetterOrDigit(c) || c == '-';
+  }
+  private static boolean isZoneChar(char c) {
+    return Character.isLetter(c);
+  }
+
+
 }

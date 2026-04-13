@@ -132,7 +132,7 @@ public class HelloController {
         }
 
         if (regexTypeComboBox != null) {
-            regexTypeComboBox.getItems().addAll("Числа", "Пароли", "Email");
+            regexTypeComboBox.getItems().addAll("Числа", "Пароли", "Email", "Email (Автомат)");
             regexTypeComboBox.setValue("Числа");
         }
 
@@ -180,7 +180,13 @@ public class HelloController {
             return;
         }
 
-        List<SearchResult> results = RegexSearcher.search(text, searchType);
+        List<SearchResult> results;
+
+        if ("Email (Автомат)".equals(searchType)) {
+            results = RegexSearcher.searchEmailWithAutomaton(text);
+        } else {
+            results = RegexSearcher.search(text, searchType);
+        }
 
         regexResultTable.getItems().addAll(results);
 

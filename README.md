@@ -39,19 +39,29 @@
 
 # 6. Синтаксический анализатор (Парсер)
 
-### 6.1 Разработка грамматики $G[Prototype]$
+### 6.1 Разработка грамматики G[Prototype]
 Грамматика описывает правила построения прототипа функции в PHP:
 
-1. `<Prototype>  ::= KW_FUNCTION IDENTIFIER L_PAREN <Args> R_PAREN <RetType> SEMICOLON`
-2. `<Args>       ::= <Arg> <ArgsTail> | ε`
-3. `<ArgsTail>   ::= COMMA <Arg> <ArgsTail> | ε`
-4. `<Arg>        ::= <Type> VARIABLE <DefaultVal>`
-5. `<Type>       ::= QUESTION TYPE_NAME | TYPE_NAME | ε`
-6. `<DefaultVal> ::= ASSIGN <Literal> | ε`
-7. `<Literal>    ::= NUMBER | FLOAT | STRING`
-8. `<RetType>    ::= COLON <Type> | ε`
+1. `<Prototype> → 'function' <Identifier> '(' <Args> ')' <RetType> ';'`
+2. `<Args> → <Arg> <ArgsTail> | ε`
+3. `<ArgsTail> → ',' <Arg> <ArgsTail> | ε`
+4. `<Arg> → <Type> '$' <Identifier> <DefaultVal>`
+5. `<Type> → '?' <TypeName> | <TypeName>`
+6. `<DefaultVal> → '=' <Literal> | ε`
+7. `<RetType> → ':' <Type> | ε`
 
-*(где `ε` означает пустое правило / отсутствие элемента)*
+* `<Literal> → <Number> | <Float> | <String>`
+* `<Identifier> → <Letter> <IdRem>`
+* `<IdRem> → <Letter> <IdRem> | <Digit> <IdRem> | '_' <IdRem> | ε`
+* `<TypeName> → 'int' | 'float' | 'string' | <Identifier>`
+* `<Number> → <Digit> <NumberTail>`
+* `<NumberTail> → <Digit> <NumberTail> | ε`
+* `<Float> → <Number> '.' <Number>`
+* `<String> → '"' <StringChars> '"' | '\'' <StringChars> '\''`
+
+* `<Digit> -> '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'`
+* `<Letter> -> 'a' | 'b' | ... | 'z' | 'A' | 'B' | ... | 'Z'`
+* `<StringChars> -> любая последовательность символов, кроме кавычек`
 
 ### 6.2 Классификация грамматики
 По иерархии Хомского данная грамматика является **контекстно-свободной (КС-грамматикой)**.
@@ -59,6 +69,12 @@
 
 ### 6.3 Метод анализа
 Используется алгоритм **рекурсивного спуска**. Для каждого нетерминала грамматики реализован отдельный метод (например, `parsePrototype()`, `parseArgs()`, `parseType()`). Парсер последовательно вызывает эти методы, "поглощая" ожидаемые токены из списка, переданного сканером.
+
+**Схема рекурсивного спуска:**
+Ниже представлена схема графа вызовов парсера при выполнении синтаксического анализа:
+
+![Схема рекурсивного спуска](recursia.png)  
+*Рисунок 2 — Схема метода рекурсивного спуска*
 
 ### 6.4 Диагностика и нейтрализация ошибок (Метод Айронса)
 Для предотвращения остановки анализатора при первой же ошибке реализована нейтрализация на уровне фразы (упрощенный метод Айронса).
