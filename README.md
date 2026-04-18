@@ -68,7 +68,7 @@
 **Z** = ‹Prototype›
 
 **VT** =  
-`{ 'function', 'int', 'float', 'string', '(', ')', ';', ',', '$', '?', '=', ':', '.', '"', '\'', '_', ' ', a..z, A..Z, 0..9 }`
+`{ '(', ')', ';', ',', '$', '?', '=', ':', '.', '"', '\'', '_', ' ', a..z, A..Z, 0..9 }`
 
 **VN** =  
 `{ <Prototype>, <Args>, <ArgsTail>, <Arg>, <Type>, <DefaultVal>, <Literal>, <RetType>, <Identifier>, <IdRem>, <TypeName>, <Number>, <NumberTail>, <Float>, <String>, <StringChars>, <Digit>, <Letter> }`
