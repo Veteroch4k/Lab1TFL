@@ -63,11 +63,15 @@
 * `<Letter> -> 'a' | 'b' | ... | 'z' | 'A' | 'B' | ... | 'Z'`
 * `<StringChars> -> любая последовательность символов, кроме кавычек`
 
-Следуя введенному формальному определению грамматики, представим G[‹Prototype›] ее составляющими:
-Z = ‹Prototype›;  
-VT = {'function', 'int', 'float', 'string', '(', ')', ';', ',', '$', '?', '=', ':', '.', ' " ', ' \' ', '_', ' ' (пробел), a..z, A..Z, 0..9};  
-VN = {<Prototype>, <Args>, <ArgsTail>, <Arg>, <Type>, <DefaultVal>,  
-<Literal>, <RetType>, <Identifier>, <IdRem>, <TypeName>, <Number>, <NumberTail>, <Float>, <String>, <StringChars>, <Digit>, <Letter>}.
+## Формальное определение грамматики G[‹Prototype›]
+
+**Z** = ‹Prototype›
+
+**VT** =  
+`{ 'function', 'int', 'float', 'string', '(', ')', ';', ',', '$', '?', '=', ':', '.', '"', '\'', '_', ' ', a..z, A..Z, 0..9 }`
+
+**VN** =  
+`{ <Prototype>, <Args>, <ArgsTail>, <Arg>, <Type>, <DefaultVal>, <Literal>, <RetType>, <Identifier>, <IdRem>, <TypeName>, <Number>, <NumberTail>, <Float>, <String>, <StringChars>, <Digit>, <Letter> }`
 
 
 ### 6.2 Классификация грамматики
