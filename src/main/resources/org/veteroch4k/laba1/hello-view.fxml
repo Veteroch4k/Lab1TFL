@@ -59,13 +59,13 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Текст">
           <items>
-            <MenuItem mnemonicParsing="false" text="Постановка задачи" />
-            <MenuItem mnemonicParsing="false" text="Грамматика" />
-            <MenuItem mnemonicParsing="false" text="Классификация грамматики" />
-            <MenuItem mnemonicParsing="false" text="Метод анализа" />
-            <MenuItem mnemonicParsing="false" text="Тестовый пример" />
-            <MenuItem mnemonicParsing="false" text="Список литературы" />
-            <MenuItem mnemonicParsing="false" text="Исходный код программы" />
+            <MenuItem mnemonicParsing="false" onAction="#showTaskAction" text="Постановка задачи" />
+            <MenuItem mnemonicParsing="false" onAction="#showGrammarAction" text="Грамматика" />
+            <MenuItem mnemonicParsing="false" onAction="#showClassificationAction" text="Классификация грамматики" />
+            <MenuItem mnemonicParsing="false" onAction="#showAnalysisAction" text="Метод анализа" />
+            <MenuItem mnemonicParsing="false" onAction="#showExamplesAction" text="Тестовый пример" />
+            <MenuItem mnemonicParsing="false" onAction="#showReferencesAction" text="Список литературы" />
+            <MenuItem mnemonicParsing="false" onAction="#showCodeAction" text="Исходный код программы" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Пуск">
@@ -78,7 +78,7 @@
         <Menu mnemonicParsing="false" text="Справка">
           <items>
             <MenuItem fx:id="aboutSpravkaItem" mnemonicParsing="false" onAction="#onSpravkaClick"  text="Вызов справки" />
-            <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#onAboutClick" text="О программе" />
+            <MenuItem mnemonicParsing="false" onAction="#showInfoAction" text="О программе" />
           </items>
         </Menu>
       </menus>

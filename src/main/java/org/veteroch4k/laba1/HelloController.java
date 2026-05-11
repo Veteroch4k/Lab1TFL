@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -27,7 +29,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class HelloController {
 
@@ -423,36 +428,116 @@ public class HelloController {
     }
 
     @FXML
-    public void onAboutClick(ActionEvent event) {
-        try {
-            String githubUrl = "https://github.com/Veteroch4k/Lab1TFL?tab=readme-ov-file#readme";
+    private void onSpravkaClick() {
+        String userGuide = getSectionFromReadme("# Приложение А. Руководство пользователя");
 
-            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI(githubUrl));
-            } else {
-                Runtime.getRuntime().exec("xdg-open " + githubUrl);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        showInfoWindow("Справка", userGuide);
+    }
+
+    // --- ОБРАБОТЧИКИ НАЖАТИЙ КНОПОК МЕНЮ ---
+
+    @FXML
+    void showTaskAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/task.txt");
+        showInfoWindow("Постановка задачи", content);
     }
 
     @FXML
-    private void onSpravkaClick() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Справка");
-        alert.setHeaderText("Справка");
-        alert.setContentText(
-                "Реализованные функции:\n" +
-                        "• Многокладочный интерфейс с нумерацией строк\n" +
-                        "• Изменение масштаба шрифта (Ctrl + Колесико)\n" +
-                        "• Открытие файлов через Drag-and-Drop\n" +
-                        "• Строка состояния с информацией о кодировке, языке и позиции курсора\n" +
-                        "• Сохранение, открытие и редактирование текста\n" +
-                        "• Интеграция с анализатором (заглушка)"
-        );
-        alert.showAndWait();
+    void showGrammarAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/grammar.txt");
+        showInfoWindow("Грамматика", content);
     }
+
+    @FXML
+    void showClassificationAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/grammar_class.txt");
+        showInfoWindow("Классификация грамматики", content);
+    }
+
+    @FXML
+    void showAnalysisAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/analyze_method.txt");
+        showInfoWindow("Метод анализа", content);
+    }
+
+    @FXML
+    void showExamplesAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/test_examples.txt");
+        showInfoWindow("Тестовые примеры", content);
+    }
+
+    @FXML
+    void showReferencesAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/literature.txt");
+        showInfoWindow("Список литературы", content);
+    }
+
+    @FXML
+    void showCodeAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/code.txt");
+        showInfoWindow("Исходный код программы", content);
+    }
+
+    @FXML
+    void showInfoAction(ActionEvent event) {
+        String content = readTextFromFile("src/main/resources/kr/info.txt");
+        showInfoWindow("О программе", content);
+    }
+
+
+    private void showInfoWindow(String title, String content) {
+        Stage infoStage = new Stage();
+        infoStage.setTitle(title);
+
+        infoStage.initModality(Modality.NONE);
+
+        TextArea textArea = new TextArea(content);
+        textArea.setEditable(false); // Запрещаем редактирование
+        textArea.setWrapText(true);  // Включаем перенос строк
+
+        VBox vbox = new VBox(textArea);
+        VBox.setVgrow(textArea, Priority.ALWAYS);
+
+        Scene scene = new Scene(vbox, 600, 400);
+        infoStage.setScene(scene);
+
+        infoStage.show();
+    }
+    private String readTextFromFile(String filePath) {
+        try {
+            return Files.readString(Path.of(filePath));
+        } catch (IOException e) {
+            return "Ошибка при загрузке файла: " + filePath + "\nПроверьте, существует ли файл.";
+        }
+    }
+    private String getSectionFromReadme(String targetHeader) {
+        try {
+            List<String> lines = Files.readAllLines(Path.of("README.md"));
+            StringBuilder content = new StringBuilder();
+            boolean found = false;
+
+            for (String line : lines) {
+                String trimmed = line.trim();
+
+                if (trimmed.equalsIgnoreCase(targetHeader)) {
+                    found = true;
+                    continue;
+                }
+
+                if (found) {
+                    if (trimmed.startsWith("# ") && !trimmed.startsWith("##")) {
+                        break;
+                    }
+
+                    content.append(line).append("\n");
+                }
+            }
+            return found ? content.toString().trim() : "Раздел не найден.";
+        } catch (IOException e) {
+            return "Не удалось прочитать README.md";
+        }
+    }
+
 
     @FXML public void onUndoClick(ActionEvent event) { if(getActiveTextArea() != null) getActiveTextArea().undo(); }
     @FXML public void onRedoClick(ActionEvent event) { if(getActiveTextArea() != null) getActiveTextArea().redo(); }

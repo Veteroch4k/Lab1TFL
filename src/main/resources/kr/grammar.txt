@@ -1,0 +1,25 @@
+Определим грамматику прототипа функции языка PHP G[Prototype] в нотации Хомского. Символ ε обозначает пустое множество (эпсилон-переход).
+1.	<Prototype> → 'function' <Identifier> '(' <Args> ')' <RetType> ';'
+2.	<Args> → <Arg> <ArgsTail> | ε
+3.	<ArgsTail> → ',' <Arg> <ArgsTail> | ε
+4.	<Arg> → <Type> '$' <Identifier> <DefaultVal>
+5.	<Type> → '?' <TypeName> | <TypeName>
+6.	<DefaultVal> → '=' <Literal> | ε
+7.	<RetType> → ':' <Type> | ε
+-	  <Literal> → <Number> | <Float> | <String>
+-	  <Identifier> → <Letter> <IdRem>
+- 	<IdRem> → <Letter> <IdRem> | <Digit> <IdRem> | '_' <IdRem> | ε
+- 	<TypeName> → 'int' | 'float' | 'string' | <Identifier>
+- 	<Number> → <Digit> <NumberTail>
+- 	<NumberTail> → <Digit> <NumberTail> | ε
+- 	<Float> → <Number> '.' <Number>
+- 	<String> → ' " ' <StringChars> ' " ' | '\ '' <StringChars> '\ ''
+•	  <Digit> -> '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+•	  <Letter> -> 'a' | 'b' | ... | 'z' | 'A' | 'B' | ... | 'Z'
+•	  <StringChars> -> любая последовательность символов, кроме кавычек
+
+Следуя введенному формальному определению грамматики, представим G[‹Prototype ›] ее составляющими:
+•	Z = ‹ Prototype›;
+•	VT = {(, ), ;, ,, $, ?, =, :, .,  " ,  ', _, , a..z, A..Z, 0..9};
+•	VN = { <Prototype>, <Args>, <ArgsTail>, <Arg>, <Type>, <DefaultVal>, <Literal>, <RetType>, <Identifier>, <IdRem>, <TypeName>, <Number>, <NumberTail>, <Float>, <String>, <StringChars>, <Digit>, <Letter>}.
+

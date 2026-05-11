@@ -109,9 +109,7 @@ public class SyntaxAnalyzer {
   }
 
   private void parseType() {
-    if (match(TokenType.QUESTION)) {
-      requireTypeToken();
-    }
+    match(TokenType.QUESTION);
     requireTypeToken();
   }
 

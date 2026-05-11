@@ -1,0 +1,7 @@
+function myFunc(int $a);
+function printMessage() @;
+function caclTax(int $amount, ?string $currency = 'USD'): float;
+function 123(int $a ;
+function getData(): ;
+function test(int $a) float;
+4324234f342unctfsdfion myFunc(int $amount): float;
