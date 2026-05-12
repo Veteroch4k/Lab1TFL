@@ -3,7 +3,9 @@ package org.veteroch4k.laba1;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -429,58 +431,58 @@ public class HelloController {
 
     @FXML
     private void onSpravkaClick() {
-        String userGuide = getSectionFromReadme("# Приложение А. Руководство пользователя");
+        String content = readTextFromResources("/kr/spravka.txt");
 
-        showInfoWindow("Справка", userGuide);
+        showInfoWindow("Справка", content);
     }
 
     // --- ОБРАБОТЧИКИ НАЖАТИЙ КНОПОК МЕНЮ ---
 
     @FXML
     void showTaskAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/task.txt");
+        String content = readTextFromResources("/kr/task.txt");
         showInfoWindow("Постановка задачи", content);
     }
 
     @FXML
     void showGrammarAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/grammar.txt");
+        String content = readTextFromResources("/kr/grammar.txt");
         showInfoWindow("Грамматика", content);
     }
 
     @FXML
     void showClassificationAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/grammar_class.txt");
+        String content = readTextFromResources("/kr/grammar_class.txt");
         showInfoWindow("Классификация грамматики", content);
     }
 
     @FXML
     void showAnalysisAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/analyze_method.txt");
+        String content = readTextFromResources("/kr/analyze_method.txt");
         showInfoWindow("Метод анализа", content);
     }
 
     @FXML
     void showExamplesAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/test_examples.txt");
+        String content = readTextFromResources("/kr/test_examples.txt");
         showInfoWindow("Тестовые примеры", content);
     }
 
     @FXML
     void showReferencesAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/literature.txt");
+        String content = readTextFromResources("/kr/literature.txt");
         showInfoWindow("Список литературы", content);
     }
 
     @FXML
     void showCodeAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/code.txt");
+        String content = readTextFromResources("/kr/code.txt");
         showInfoWindow("Исходный код программы", content);
     }
 
     @FXML
     void showInfoAction(ActionEvent event) {
-        String content = readTextFromFile("src/main/resources/kr/info.txt");
+        String content = readTextFromResources("/kr/info.txt");
         showInfoWindow("О программе", content);
     }
 
@@ -503,40 +505,20 @@ public class HelloController {
 
         infoStage.show();
     }
-    private String readTextFromFile(String filePath) {
-        try {
-            return Files.readString(Path.of(filePath));
-        } catch (IOException e) {
-            return "Ошибка при загрузке файла: " + filePath + "\nПроверьте, существует ли файл.";
-        }
-    }
-    private String getSectionFromReadme(String targetHeader) {
-        try {
-            List<String> lines = Files.readAllLines(Path.of("README.md"));
-            StringBuilder content = new StringBuilder();
-            boolean found = false;
+    private String readTextFromResources(String resourcePath) {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
 
-            for (String line : lines) {
-                String trimmed = line.trim();
-
-                if (trimmed.equalsIgnoreCase(targetHeader)) {
-                    found = true;
-                    continue;
-                }
-
-                if (found) {
-                    if (trimmed.startsWith("# ") && !trimmed.startsWith("##")) {
-                        break;
-                    }
-
-                    content.append(line).append("\n");
-                }
+            if (is == null) {
+                return "Ошибка: Файл '" + resourcePath + "' не найден в ресурсах программы.";
             }
-            return found ? content.toString().trim() : "Раздел не найден.";
-        } catch (IOException e) {
-            return "Не удалось прочитать README.md";
+
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+        } catch (Exception e) {
+            return "Критическая ошибка при чтении файла: " + e.getMessage();
         }
     }
+
 
 
     @FXML public void onUndoClick(ActionEvent event) { if(getActiveTextArea() != null) getActiveTextArea().undo(); }
