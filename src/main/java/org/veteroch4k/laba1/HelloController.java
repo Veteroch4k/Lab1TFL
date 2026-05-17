@@ -258,6 +258,42 @@ public class HelloController {
         errorTable.refresh();
     }
 
+    @FXML
+    public void onShowAstClick(ActionEvent event) {
+        TextArea activeTextArea = getActiveTextArea();
+        if (activeTextArea == null || activeTextArea.getText().trim().isEmpty()) {
+            showInfoWindow("Ошибка", "Нет текста для построения дерева.");
+            return;
+        }
+
+        LexicalAnalyzer lexer = new LexicalAnalyzer();
+        List<Token> allTokens = lexer.analyze(activeTextArea.getText());
+        List<Token> validTokensForParser = new ArrayList<>();
+
+        for (Token t : allTokens) {
+            if (t.type() == TokenType.ERROR) {
+                showInfoWindow("Ошибка", "В коде присутствуют лексические ошибки. Дерево не может быть построено.");
+                return;
+            } else if (t.type() != TokenType.WHITESPACE) {
+                validTokensForParser.add(t);
+            }
+        }
+
+        SyntaxAnalyzer parser = new SyntaxAnalyzer(validTokensForParser);
+        List<ErrorItem> syntaxErrors = parser.parse();
+
+        if (syntaxErrors.isEmpty()) {
+            Object uiRoot = parser.getGraphicalAst();
+            if (uiRoot != null) {
+                AstVisualizer.showWindow(uiRoot);
+            } else {
+                showInfoWindow("Ошибка", "Не удалось сформировать структуру дерева.");
+            }
+        } else {
+            showInfoWindow("Ошибка AST", "Невозможно отобразить дерево: в коде присутствуют синтаксические или семантические ошибки. Запустите обычный анализ, чтобы посмотреть таблицу ошибок.");
+        }
+    }
+
     private void highlightToken(TextArea textArea, Token token) {
         textArea.requestFocus();
         int caretPos = 0;
@@ -526,6 +562,8 @@ public class HelloController {
             return "Критическая ошибка при чтении файла: " + e.getMessage();
         }
     }
+
+
 
 
 

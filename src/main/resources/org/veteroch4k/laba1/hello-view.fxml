@@ -73,6 +73,7 @@
             <MenuItem mnemonicParsing="false" onAction="#onStartAnalysisClick" text="Запустить анализ">
               <accelerator><KeyCombination fx:value="F5" /></accelerator>
             </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onShowAstClick" text="Показать AST" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Справка">
@@ -127,6 +128,10 @@
             </ImageView>
           </graphic>
           <tooltip><Tooltip text="Запустить лексический анализ" /></tooltip>
+        </Button>
+
+        <Button mnemonicParsing="false" onAction="#onShowAstClick" text="Показать AST">
+          <tooltip><Tooltip text="Отрисовать графическое дерево AST" /></tooltip>
         </Button>
 
         <Separator orientation="VERTICAL" />

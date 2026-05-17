@@ -7,6 +7,7 @@ import org.veteroch4k.laba1.Lexicon.TokenType;
 import org.veteroch4k.laba1.Semantics.ArgNode;
 import org.veteroch4k.laba1.Semantics.PrototypeNode;
 import org.veteroch4k.laba1.Semantics.SymbolTable;
+import org.veteroch4k.laba1.UINode;
 
 public class SyntaxAnalyzer {
 
@@ -235,4 +236,39 @@ public class SyntaxAnalyzer {
     }
   }
 
+  public UINode getGraphicalAst() {
+    if (rootNodes.isEmpty() || !errors.isEmpty()) return null;
+
+    UINode programRoot = new UINode("ProgramNode");
+    for (PrototypeNode proto : rootNodes) {
+      UINode pNode = new UINode("PrototypeNode\nname: \"" + proto.functionName + "\"");
+
+      if (!proto.arguments.isEmpty()) {
+        UINode argsNode = new UINode("Arguments");
+        for (ArgNode arg : proto.arguments) {
+          UINode aNode = new UINode("ArgNode\nname: \"" + arg.name + "\"");
+
+          UINode typeNode = new UINode("TypeNode\nname: \"" + arg.type + "\"");
+          aNode.addChild(typeNode);
+
+          if (arg.defaultValue != null) {
+            UINode valNode = new UINode("LiteralNode\nvalue: " + arg.defaultValue);
+            aNode.addChild(valNode);
+          }
+          argsNode.addChild(aNode);
+        }
+        pNode.addChild(argsNode);
+      }
+
+      if (proto.returnType != null) {
+        UINode retNode = new UINode("ReturnType\nTypeNode: \"" + proto.returnType + "\"");
+        pNode.addChild(retNode);
+      }
+      programRoot.addChild(pNode);
+    }
+
+    return rootNodes.size() == 1 ? programRoot.children.getFirst() : programRoot;
+  }
+
 }
+
