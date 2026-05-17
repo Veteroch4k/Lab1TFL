@@ -1,4 +1,4 @@
-package org.veteroch4k.laba1;
+package org.veteroch4k.laba1.Regex;
 
 public class SearchResult {
   private final String text;

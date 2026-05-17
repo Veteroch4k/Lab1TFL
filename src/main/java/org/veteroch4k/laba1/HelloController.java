@@ -1,13 +1,10 @@
 package org.veteroch4k.laba1;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -35,6 +32,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.veteroch4k.laba1.Lexicon.LexicalAnalyzer;
+import org.veteroch4k.laba1.Lexicon.Token;
+import org.veteroch4k.laba1.Lexicon.TokenType;
+import org.veteroch4k.laba1.Regex.RegexSearcher;
+import org.veteroch4k.laba1.Regex.SearchResult;
+import org.veteroch4k.laba1.Syntax.ErrorItem;
+import org.veteroch4k.laba1.Syntax.SyntaxAnalyzer;
 
 public class HelloController {
 
@@ -242,6 +246,10 @@ public class HelloController {
         int totalErrors = lexicalErrorsCount + syntaxErrors.size();
         if (totalErrors == 0) {
             statusLabel.setText("Статус: Анализ завершен успешно. Ошибок не найдено.");
+
+            String astTree = parser.getAstTree();
+            showInfoWindow("AST Дерево (Семантический анализ)", astTree);
+
         } else {
             statusLabel.setText("Статус: Анализ завершен. Найдено ошибок: " + totalErrors);
         }

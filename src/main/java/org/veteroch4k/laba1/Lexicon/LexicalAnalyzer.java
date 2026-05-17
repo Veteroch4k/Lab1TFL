@@ -1,4 +1,4 @@
-package org.veteroch4k.laba1;
+package org.veteroch4k.laba1.Lexicon;
 
 import java.util.ArrayList;
 import java.util.List;

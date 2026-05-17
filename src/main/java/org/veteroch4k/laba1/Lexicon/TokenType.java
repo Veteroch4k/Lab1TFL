@@ -1,4 +1,4 @@
-package org.veteroch4k.laba1;
+package org.veteroch4k.laba1.Lexicon;
 
 public enum TokenType {
   VARIABLE, NUMBER, STRING,
